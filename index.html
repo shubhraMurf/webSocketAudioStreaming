@@ -193,9 +193,8 @@
       let socket = null;
       let audioChunks = []; // Store raw audio chunks
       let base64AudioChunks = []; // Stored base64 audio chunks
-      let audioContext = new (window.AudioContext ||
-        window.webkitAudioContext)();
-      let playheadTime = audioContext.currentTime;
+      let audioContext;
+      let playheadTime;
       let isPlaying = false;
       let wavHeaderSet = true;
 
@@ -243,7 +242,8 @@
       connectBtn.onclick = () => {
         logMessage('🔗 Connecting to WebSocket...');
         socket = new WebSocket(WS_URL + `?api-key=${apiKey.value}`);
-
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        playheadTime = audioContext.currentTime; // Initialize playhead time
         socket.onopen = () => {
           logMessage('✅ WebSocket connected');
           connectBtn.disabled = true;
